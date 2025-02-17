@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import eslint from 'vite-plugin-eslint';
+import checker from 'vite-plugin-checker';
 
 export default defineConfig({
   root: 'src',
@@ -14,5 +15,12 @@ export default defineConfig({
       },
     },
   },
-  plugins: [eslint()],
+  plugins: [
+    eslint(),
+    checker({
+      typescript: true,
+      // eslint: { lintCommand: 'eslint "**/*.{js,ts}"' },
+      eslint: { lintCommand: 'eslint "{ts,js,api,types}**/*.{js,ts}"' },
+    }),
+  ],
 });
