@@ -1,14 +1,14 @@
 import '../css/normalize.css';
 import '../css/style.css';
-import { routerQueryReplace, routerQueryPush, routerQueryRemove, getParams } from './utils/url';
-import { apiGetTagsList, apiGetTagsProduct } from '../api';
+import { routerQueryReplace, routerQueryPush, routerQueryRemove, getParams } from './utils/url.js';
+import { apiGetTagsList, apiGetTagsProduct } from '../api/index.js';
 import loading from './utils/load.js';
 
-const tagParent = document.querySelector('.parent');
-const tagChild = document.querySelector('.child');
-const content = document.querySelector('.content');
-let tagsArr = [];
-let productsArr = [];
+const tagParent = document.querySelector('.parent') as HTMLDivElement;
+const tagChild = document.querySelector('.child') as HTMLDivElement;
+const content = document.querySelector('.content') as HTMLElement;
+let tagsArr: TTag[] = [];
+let productsArr: TProduct[] = [];
 let tagsHtml = '';
 let tagsChildHtml = '';
 let productsHtml = '';
@@ -40,7 +40,7 @@ const fetchProducts = async () => {
   try {
     const tag = getParams().get('tag');
     const child = getParams().get('child');
-    const params = {};
+    const params: { tag?: string; child?: string } = {};
     if (tag) params.tag = tag;
     if (child) params.child = child;
     const res = await apiGetTagsProduct(params);
@@ -115,9 +115,11 @@ const addTagChildListener = () => {
   for (let i = 0; i < tagChildAll.length; i++) {
     tagChildAll[i].addEventListener('click', async (e) => {
       loading.show();
-      const tagKey = e.target.attributes['data-key'].value;
+      const target = e.target as HTMLAnchorElement;
+      const tagKey = target.getAttribute('data-key');
+      // const tagKey = e.target.attributes['data-key'].value;
       tagChildAll.forEach((item) => item.classList.remove('active'));
-      e.target.classList.add('active');
+      target.classList.add('active');
       routerQueryPush(`child=${tagKey}`);
       await fetchProductsRender(); // 抓產品資料以及渲染
       loading.hidden();
@@ -131,10 +133,12 @@ const addTagListener = () => {
   for (let i = 0; i < tagParentAll.length; i++) {
     tagParentAll[i].addEventListener('click', async (e) => {
       loading.show();
-      const tagKey = e.target.attributes['data-key'].value;
+      const target = e.target as HTMLAnchorElement;
+      const tagKey = target.getAttribute('data-key');
+      // const tagKey = e.target.attributes['data-key'].value;
       routerQueryPush(`tag=${tagKey}`);
       tagParentAll.forEach((item) => item.classList.remove('active'));
-      e.target.classList.add('active');
+      target.classList.add('active');
       routerQueryRemove('child'); // 每次切換先移除第二層的 tag 選取
       await tagChildRender(); // 第二層渲染
       await fetchProductsRender(); // 抓產品資料以及渲染
@@ -159,5 +163,5 @@ const init = async () => {
 
 init();
 
-const gvData = gv;
-console.log('gvData=>', gvData);
+// const gvData = '';
+// console.log('gvData=>', gvData);

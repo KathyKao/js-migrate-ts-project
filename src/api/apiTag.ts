@@ -6,7 +6,7 @@ const request = axios.create({
 
 export const apiGetTagsList = () => request.get('/nav/tags');
 
-export const apiGetTagsProduct = (params) =>
+export const apiGetTagsProduct = (params: { tag?: string; child?: string }) =>
   request.get('/nav/tags/product', {
     params,
   });

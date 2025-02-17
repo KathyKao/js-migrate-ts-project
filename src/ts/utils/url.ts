@@ -3,7 +3,7 @@ const getParams = () => {
   return params;
 };
 
-const queryParse = (query) => {
+const queryParse = (query: string) => {
   const queryKey = query.split('=')[0];
   if (window.location.search === '') {
     return `?${query}`;
@@ -15,7 +15,7 @@ const queryParse = (query) => {
   return `${window.location.search}&${query}`;
 };
 
-const parseFindNewQuery = (params, fist) => {
+const parseFindNewQuery = (params: string, fist: number) => {
   const { search } = window.location;
   const query = getParams().get(params);
   const qParse = queryParse(`${params}=${query}`);
@@ -31,38 +31,38 @@ const parseFindNewQuery = (params, fist) => {
 };
 
 // 添加 query 參數 push
-const routerQueryPush = (params) => {
+const routerQueryPush = (params: string) => {
   const { pathname } = window.location;
   const query = queryParse(params);
-  window.history.pushState({}, null, `${pathname}${query}`);
+  window.history.pushState({}, '', `${pathname}${query}`);
 };
 
 // 添加 query 參數 replace
-const routerQueryReplace = (params) => {
+const routerQueryReplace = (params: string) => {
   const { pathname } = window.location;
   const query = queryParse(params);
-  window.history.replaceState({}, null, `${pathname}${query}`);
+  window.history.replaceState({}, '', `${pathname}${query}`);
 };
 
 // 刪除 query 參數 push
-const routerQueryRemove = (params) => {
+const routerQueryRemove = (params: string) => {
   const { search } = window.location;
   const fist = search.indexOf(params);
   if (['?', '&'].includes(search[fist - 1])) {
     const newQuery = parseFindNewQuery(params, fist);
     const { pathname } = window.location;
-    window.history.pushState({}, null, `${pathname}${newQuery}`);
+    window.history.pushState({}, '', `${pathname}${newQuery}`);
   }
 };
 
 // 刪除 query 參數 replace
-const routerQueryReplaceRemove = (params) => {
+const routerQueryReplaceRemove = (params: string) => {
   const { search } = window.location;
   const fist = search.indexOf(params);
   if (['?', '&'].includes(search[fist - 1])) {
     const newQuery = parseFindNewQuery(params, fist);
     const { pathname } = window.location;
-    window.history.replaceState({}, null, `${pathname}${newQuery}`);
+    window.history.replaceState({}, '', `${pathname}${newQuery}`);
   }
 };
 
